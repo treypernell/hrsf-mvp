@@ -1,0 +1,42 @@
+{
+  "name": "sequencer",
+  "version": "1.0.0",
+  "description": "A web-based sequencer with various sound libraries and customization options",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -d --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/index.js"
+  },
+  "author": "Trey Pernell",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.0",
+    "mini-css-extract-plugin": "^0.4.4",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7",
+    "react-rangeslider": "^2.2.0",
+    "react-select-plus": "^1.0.0-rc.3.patch12",
+    "reactstrap": "^6.5.0",
+    "scsynth": "0.0.23",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-combine-loaders": "^2.0.4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^6.26.3",
+    "create-react-class": "^15.6.3",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.4",
+    "rc-slider": "^8.6.3",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-dropdown": "^1.6.2",
+    "react-slider": "^0.11.2",
+    "tone": "^0.12.80"
+  }
+}

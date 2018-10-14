@@ -1,0 +1,22 @@
+.test {
+  color: red;
+}
+
+.sequence-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 60px) ;
+  grid-template-rows: repeat(7, 60px);
+  justify-items: center;
+  align-items: center;
+}
+/*Add in a keyframe bounce later to make it look SNAPPY*/
+.square-container {
+  display: inline-grid;
+  width: 60px;
+  height: 60px;
+}
+
+.dropdown {
+  background-color: beige;
+  color: red;
+}
