@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Tone from 'tone';
 import styles from '../styles/Sequencer.css';
+import axios from 'axios';
+
+import PlayPause from './PlayPause.jsx';
+import Params from './Params.jsx';
 import Square from './Square.jsx';
 import Scrubber from './Scrubber.jsx'
+import SelectSave from './SelectSave.jsx'
 import Scales from '../scales.js';
-import Slider, { Range } from 'rc-slider';
-import 'rc-slider/assets/index.css';
-import axios from 'axios';
 
 var tremolo = new Tone.Tremolo().start();
 var synth = new Tone.PolySynth({
@@ -101,50 +103,56 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    const { rows, cols, scale } = this.state
+    const { rows, cols, scale, scales, selectedSequence, sequences } = this.state
     this.state
     return (
       <div>
-      <button onClick={this.playSequence.bind(this)}>PLAY</button>
-      <button onClick={this.pauseSequence.bind(this)}>STOP</button>
+      <PlayPause 
+        playSequence={this.playSequence.bind(this)}
+        pauseSequence={this.pauseSequence.bind(this)}/>
       <div className='sequence-container'>
         <Scrubber />
         <div className={`${styles['sequence-grid']}`}>
           {
-            this.state.rows.map((val, row) => {
-              return this.state.cols.map((val, col) => {
+            rows.map((val, row) => {
+              return cols.map((val, col) => {
                 return (
-                 <div className={`${styles['square-container']}`}>
                   <Square 
                     row={row} 
                     col={col} 
                     updateSequence={this.updateSequence.bind(this)}
                     note={Scales[scale][row]}/>
-                 </div>
                 )
               })
             })
           }
         </div>
       </div>
-      <div>Pick a scale:</div>
-        <select value={this.state.scale} onChange={this.updateScale.bind(this)}>
-          {this.state.scales.map((scale, index) => {
-            return <option value={scale}>{scale}</option>
-          })
-          }
-        </select>
-        <div> Select a tempo: </div>
-      <Slider min={1} max={20} onChange={this.changeTempo.bind(this)}/>
-        <div> Select a pre-existing song </div>
-      <select value={this.state.selectedSequence} onChange={() => console.log('change registered')}>
-          {this.state.sequences.map((seq, index) => {
-            return <option value={seq}>{seq}</option>
-          })
-          }
-      </select>
-      </div>)
+      <Params 
+        updateScale={this.updateScale.bind(this)}
+        scale={scale}
+        scales={scales}
+        changeTempo={this.changeTempo.bind(this)}/>
+      <SelectSave 
+          selectedSequence={selectedSequence} 
+          sequences={sequences}/>
+      </div>
+      )
   }
 }
 
 export default Sequencer;
+
+
+
+/*
+  TODO: 
+    - Refactor code for clarity - extract
+      logic from sequence functions and put in
+      helper functions file
+    - Create button allowing for persistence of
+      current configuration.
+    - Load a given configuration from a selected file **TIME INTENSIVE**
+    - Have buttons highlight when 'played' by the synth **TIME INTENSIVE**
+
+*/

@@ -46,11 +46,13 @@ class Square extends React.Component {
 
   render() {
     return(
-      <button 
-        className={`${this.state.buttonClass} ${styles['square']}`}
-        onClick={this.stageNote}>
-        {!this.props.col ? this.props.note : ''}
-      </button>
+      <div className={`${styles['square-container']}`}>
+        <button 
+          className={`${this.state.buttonClass} ${styles['square']}`}
+          onClick={this.stageNote}>
+          {!this.props.col ? this.props.note : ''}
+        </button>
+      </div>
     )
   }
 }
