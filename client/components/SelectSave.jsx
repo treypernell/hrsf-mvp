@@ -5,7 +5,8 @@ const SelectSave = (props) => {
   return (
     <div>
       <div> Select a pre-existing song </div>
-      <select value={props.selectedSequence} onChange={() => console.log('change registered')}>
+      <select value={props.selectedSequence} onChange={props.loadExistingSong}>
+        <option value=''></option>
         {props.sequences.map((seq, index) => {
           return <option value={seq}>{seq}</option>
         })

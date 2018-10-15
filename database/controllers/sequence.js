@@ -12,11 +12,19 @@ module.exports = {
         console.log(err);
       })
   },
-  findSequences: function(callback) {
+  findAllSequences: function(callback) {
     Sequence.find()
       .exec((err, result) => {
         if (err) console.log(err)
-          return callback(result);
+        return callback(result);
+      })
+  },
+  findOneSequence: function(sequenceName, callback) {
+    Sequence.find({ name: sequenceName})
+      .exec((err, result) => {
+        if (err) console.log(err)
+        console.log('DB RESULT', result);
+      return callback(result);
       })
   }
 }

@@ -1,9 +1,14 @@
-const { saveSequence, findSequences } = require('../database/controllers/sequence.js')
+const { saveSequence, findAllSequences, findOneSequence } = require('../database/controllers/sequence.js')
 
 module.exports = {
-  get: function(req, res) {
+  getAll: function(req, res) {
     console.log('GET REQUEST RECEIVED');
-    findSequences(res.send.bind(res));
+    findAllSequences(res.send.bind(res));
+  },
+  getOne: function(req, res) {
+    console.log('GET ONE REQUEST RECEIVED');
+    findOneSequence(req.params.sequenceName, res.send.bind(res));
+    // console.log(req.params.sequenceName)
   },
   post: function(req, res) {
     console.log('POST REQUEST RECEIVED');

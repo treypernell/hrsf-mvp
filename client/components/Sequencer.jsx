@@ -87,6 +87,26 @@ class Sequencer extends React.Component {
       scale: e.target.value,
     })
   }
+  loadExistingSong(e) {
+    if (e.target.value === '') {
+      return;
+    }
+    
+    axios.get( `/sequence/${e.target.value}`)
+      .then((result) => {
+        let { scale, tempo, gridChords } = result.data[0];
+        console.log('LOADING: ', result.data[0].name)
+        this.setState({
+          scale,
+          tempo,
+          gridChords,
+          selectedSequence: result.data[0].name,
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   fetchAllSongs() {
     axios.get('/sequence')
@@ -131,7 +151,7 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    const { rows, cols, scale, scales, selectedSequence, sequences } = this.state
+    const { rows, cols, scale, scales, selectedSequence, sequences, gridChords } = this.state
     this.state
     return (
       <div>
@@ -146,6 +166,8 @@ class Sequencer extends React.Component {
               return cols.map((val, col) => {
                 return (
                   <Square 
+                    selectedSequence={selectedSequence}
+                    gridChords={gridChords}
                     row={row} 
                     col={col} 
                     updateSequence={this.updateSequence.bind(this)}
@@ -164,6 +186,7 @@ class Sequencer extends React.Component {
       <SelectSave 
           selectedSequence={selectedSequence} 
           sequences={sequences}
+          loadExistingSong={this.loadExistingSong.bind(this)}
           updateSongTitle={this.updateSongTitle.bind(this)}
           saveSong={this.saveSong.bind(this)}/>
       </div>
@@ -191,6 +214,6 @@ export default Sequencer;
   DONE
     - Create button allowing for persistence of.  **DO THIS ONE FIRST**
       current configuration. 
-  
+
 
 */

@@ -13,7 +13,9 @@ class Square extends React.Component {
     this.stageNote = this.stageNote.bind(this);
   }
 
-  stageNote() {
+
+  //refactor so that it doesn't have to look at events...
+  stageNote(e, newSequenceStaging = false) {
     const { row, col, updateSequence, note } = this.props;
     const newClass = this.state.isSelected ? `${styles['unselected']}` : `${styles['selected']}`
     this.setState((prevState) => {
@@ -22,7 +24,10 @@ class Square extends React.Component {
         buttonClass: newClass
       }
     })
-    updateSequence(note, col);
+    if(!newSequenceStaging) {
+      console.log('made it here');
+      updateSequence(note, col);
+    }
   }
 
   setClass() {
@@ -39,8 +44,23 @@ class Square extends React.Component {
     }
   }
 
+  updateWithNewSequence(prevProps) {
+    const { selectedSequence, gridChords, row, col, note, updateSequence } = this.props;
+    const { isSelected } = this.state;
+    if (selectedSequence !== prevProps.selectedSequence) {
+      let inSequence = gridChords[col].indexOf(note) >= 0;
+      if (inSequence && !isSelected) {
+        this.stageNote(null, true);
+        console.log(col, note);
+      } else if (!inSequence && isSelected) {
+        this.stageNote(null, true)
+      }
+    }
+  }
+
   componentDidUpdate(prevProps) {
     this.updateScale(prevProps);
+    this.updateWithNewSequence(prevProps);
   }
 
 
