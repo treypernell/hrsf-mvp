@@ -8,7 +8,6 @@ class Square extends React.Component {
     super(props);
     this.state ={
       isSelected: false,
-      currentNote: this.props.note,
       buttonClass: `${styles['unselected']}`,
     }
     this.stageNote = this.stageNote.bind(this);
@@ -16,7 +15,6 @@ class Square extends React.Component {
 
   stageNote() {
     const { row, col, updateSequence, note } = this.props;
-    // const { currentNote } = this.state;
     const newClass = this.state.isSelected ? `${styles['unselected']}` : `${styles['selected']}`
     this.setState((prevState) => {
       return {
@@ -33,13 +31,18 @@ class Square extends React.Component {
     `${styles['unselected']}`
   }
 
-  componentDidUpdate(prevProps) {
+  updateScale(prevProps) {
     const { note, col, updateSequence } = this.props;
     const { isSelected } = this.state;
     if (note !== prevProps.note && isSelected) {
       updateSequence(note, col, prevProps.note, true)
     }
   }
+
+  componentDidUpdate(prevProps) {
+    this.updateScale(prevProps);
+  }
+
 
   render() {
     return(

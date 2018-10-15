@@ -1,4 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/mvp');
+db = mongoose.connection;
+//PULLED FROM SA WEEK 10;
 
-ReactDOM.render(<Sequencer/>, document.getElementById('sequencer'));
+db.on('error', () => {
+  console.log('mongoose connection error');
+});
+
+db.once('open', () => {
+  console.log('mongoose connected successfully');
+});
+
+module.exports = db;

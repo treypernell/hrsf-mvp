@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import Tone from 'tone';
 import styles from '../styles/Sequencer.css';
 import Square from './Square.jsx';
+import Scrubber from './Scrubber.jsx'
 import Scales from '../scales.js';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import axios from 'axios';
 
 var tremolo = new Tone.Tremolo().start();
 var synth = new Tone.PolySynth({
@@ -32,15 +34,17 @@ class Sequencer extends React.Component {
       rows: [1,2,3,4,5,6,7],
       cols: [1,2,3,4,5,6,7,8,9,10,11,12],
       tempo: 1,
+      sequences: [],
+      selectedSequence: null,
     };
   }
-  
+
   playSequence(){
     let toggled = this.state.playToggle;
     let colNum = 0;
     (function playNote() {
       if (this.state.playToggle === toggled) {
-        synth.triggerAttackRelease(this.state.gridChords[colNum], "8n");
+        synth.triggerAttackRelease(this.state.gridChords[colNum], 0.1);
         colNum = (colNum + 1) % 12
         setTimeout(playNote.bind(this), (1000/this.state.tempo));
       }
@@ -54,9 +58,21 @@ class Sequencer extends React.Component {
   }
 
   updateScale(e) {
-    console.log('Updated ', e.target.value);
     this.setState({
       scale: e.target.value,
+    })
+  }
+
+  componentDidMount() {
+    axios.get('/sequence')
+    .then((result) => {
+      const sequences = result.data.map(seq => seq.name)
+      this.setState({
+        sequences: sequences,
+      })
+    })
+    .catch((err) => {
+      console.log(err);
     })
   }
 
@@ -79,7 +95,6 @@ class Sequencer extends React.Component {
   }
 
   changeTempo(e) {
-    console.log('Changing Tempo ', e);
     this.setState({
       tempo: e,
     })
@@ -92,30 +107,42 @@ class Sequencer extends React.Component {
       <div>
       <button onClick={this.playSequence.bind(this)}>PLAY</button>
       <button onClick={this.pauseSequence.bind(this)}>STOP</button>
-      <div className={`${styles['sequence-grid']}`}>
-        {
-          this.state.rows.map((val, row) => {
-            return this.state.cols.map((val, col) => {
-              return (
-               <div className={`${styles['square-container']}`}>
-                <Square 
-                  row={row} 
-                  col={col} 
-                  updateSequence={this.updateSequence.bind(this)}
-                  note={Scales[scale][row]}/>
-               </div>
-              )
+      <div className='sequence-container'>
+        <Scrubber />
+        <div className={`${styles['sequence-grid']}`}>
+          {
+            this.state.rows.map((val, row) => {
+              return this.state.cols.map((val, col) => {
+                return (
+                 <div className={`${styles['square-container']}`}>
+                  <Square 
+                    row={row} 
+                    col={col} 
+                    updateSequence={this.updateSequence.bind(this)}
+                    note={Scales[scale][row]}/>
+                 </div>
+                )
+              })
             })
-          })
-        }
+          }
+        </div>
       </div>
+      <div>Pick a scale:</div>
         <select value={this.state.scale} onChange={this.updateScale.bind(this)}>
           {this.state.scales.map((scale, index) => {
             return <option value={scale}>{scale}</option>
           })
           }
         </select>
+        <div> Select a tempo: </div>
       <Slider min={1} max={20} onChange={this.changeTempo.bind(this)}/>
+        <div> Select a pre-existing song </div>
+      <select value={this.state.selectedSequence} onChange={() => console.log('change registered')}>
+          {this.state.sequences.map((seq, index) => {
+            return <option value={seq}>{seq}</option>
+          })
+          }
+      </select>
       </div>)
   }
 }
