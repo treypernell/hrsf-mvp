@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
  const Scrubber = (props) => {
 
   return (
-    <div>Scrubby-Scrub</div>
+    <div></div>
   )
 }
 

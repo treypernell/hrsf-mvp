@@ -38,7 +38,26 @@ class Sequencer extends React.Component {
       tempo: 1,
       sequences: [],
       selectedSequence: null,
+      songTitle: '',
     };
+  }
+
+  saveSong() {
+    const { tempo, scale, gridChords, songTitle } = this.state;
+    const reqParams = {
+      tempo,
+      scale,
+      gridChords, 
+      name: songTitle,
+    }
+    axios.post('/sequence', reqParams)
+    .then((result) => {
+      console.log(result);
+      this.fetchAllSongs();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   playSequence(){
@@ -58,14 +77,18 @@ class Sequencer extends React.Component {
       playToggle: !this.state.playToggle,
     })
   }
-
+  updateSongTitle(e) {
+    this.setState({
+      songTitle: e.target.value,
+    })
+  }
   updateScale(e) {
     this.setState({
       scale: e.target.value,
     })
   }
 
-  componentDidMount() {
+  fetchAllSongs() {
     axios.get('/sequence')
     .then((result) => {
       const sequences = result.data.map(seq => seq.name)
@@ -75,11 +98,16 @@ class Sequencer extends React.Component {
     })
     .catch((err) => {
       console.log(err);
-    })
+    }) 
+  }
+
+  componentDidMount() {
+    this.fetchAllSongs();
   }
 
   updateSequence(currentNote, col, prevNote = null, isKeyChange = false) {
     this.setState((prevState) => {
+      /* THIS LOGIC CAN BE EXTRACTED - PLACED IN A DIFFERENT FILE */
       if (isKeyChange) {
         let prevNoteIndex = prevState.gridChords[col].indexOf(prevNote);
         prevState.gridChords[col].splice(prevNoteIndex, 1)
@@ -135,7 +163,9 @@ class Sequencer extends React.Component {
         changeTempo={this.changeTempo.bind(this)}/>
       <SelectSave 
           selectedSequence={selectedSequence} 
-          sequences={sequences}/>
+          sequences={sequences}
+          updateSongTitle={this.updateSongTitle.bind(this)}
+          saveSong={this.saveSong.bind(this)}/>
       </div>
       )
   }
@@ -149,10 +179,18 @@ export default Sequencer;
   TODO: 
     - Refactor code for clarity - extract
       logic from sequence functions and put in
-      helper functions file
-    - Create button allowing for persistence of
-      current configuration.
+      helper functions file. ** DO THIS LAST **
     - Load a given configuration from a selected file **TIME INTENSIVE**
     - Have buttons highlight when 'played' by the synth **TIME INTENSIVE**
+    - Make the grid wider overall, allowing for more notes to be selected!
+    - ONE WORD: Deploy
+*/
+
+
+/*
+  DONE
+    - Create button allowing for persistence of.  **DO THIS ONE FIRST**
+      current configuration. 
+  
 
 */

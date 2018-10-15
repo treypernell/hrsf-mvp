@@ -6,7 +6,7 @@ module.exports = {
     let seq = new Sequence(sequenceParams);
     seq.save()
       .then((success) => {
-        // console.log(success);
+        callback(200);
       })
       .catch((err) => {
         console.log(err);

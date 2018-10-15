@@ -7,11 +7,7 @@ module.exports = {
   },
   post: function(req, res) {
     console.log('POST REQUEST RECEIVED');
-    let result = saveSequence({
-      name: 'testSequence',
-      scale: 'major',
-      tempo: '100',
-      gridChords: [[],[],[],[],[],[],[],[],[],[],[],[],[]],
-    })
+    console.log(req.body)
+    saveSequence(req.body, res.send.bind(res));
   }
 }

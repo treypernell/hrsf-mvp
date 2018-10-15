@@ -11,6 +11,9 @@ const SelectSave = (props) => {
         })
         }
        </select>
+       <div> New Song Title </div>
+       <input type="text" onChange={props.updateSongTitle}/> 
+       <button onClick={props.saveSong}> Save Song </button>
      </div>
   )
 }
