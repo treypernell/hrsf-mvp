@@ -157,7 +157,8 @@ class Sequencer extends React.Component {
       rows, 
       cols, 
       scale, 
-      scales, 
+      scales,
+      tempo,
       selectedSequence, 
       sequences, 
       gridChords, 
@@ -165,6 +166,7 @@ class Sequencer extends React.Component {
       colCurrentlyPlayed } = this.state
     return (
       <div className={`${styles['app-container']}`}>
+      <div className={`${styles['app-title']}`}>MySequencer</div>
       <PlayPause 
         playSequence={this.playSequence.bind(this)}
         pauseSequence={this.pauseSequence.bind(this)}/>
@@ -195,7 +197,8 @@ class Sequencer extends React.Component {
           updateScale={this.updateScale.bind(this)}
           scale={scale}
           scales={scales}
-          updateTempo={this.updateTempo.bind(this)}/>
+          updateTempo={this.updateTempo.bind(this)}
+          tempo={tempo}/>
       <div className={`${styles['savesong-text']}`}>Save/Select Song</div>
         <SelectSave 
             selectedSequence={selectedSequence} 

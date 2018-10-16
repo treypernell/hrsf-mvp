@@ -8,7 +8,7 @@
 
 .note-played {
   animation-name: toggleColor;
-  animation-duration: 0.7s;
+  animation-duration: 1s;
   animation-timing-function: ease-out;
 }
 
@@ -24,8 +24,14 @@
 }
 
 @keyframes toggleColor {
-  0% {background-color: #F1F5F2;}
-  80% {background-color:#A0EADE;}
-  90% {background-color: #4CB963;}
-  100% {background-color: #4CB963}
+  0% {background-color: #F1F5F2;
+      width: 58px;
+      height: 58px;
+      border-radius: 6px;}
+  50% {background-color:#A0EADE;}
+  75% {background-color: #4CB963;}
+  100% {background-color: #4CB963;
+      width: 50px;
+      height: 50px;
+      border-radius: 0px;}
 }

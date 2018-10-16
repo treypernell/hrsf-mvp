@@ -17,7 +17,7 @@ const Params = (props) => {
       <div className={`${styles['tempochoice-text']}`}> Select a tempo: </div>
       <div className={`${styles['slow-text']}`}>(slow)</div>
       <div className={`${styles['fast-text']}`}>(fast)</div>
-      <Slider min={1} max={20} onChange={props.updateTempo}/>
+      <Slider min={1} max={15} value={props.tempo} onChange={props.updateTempo}/>
     </div>
   )
 }

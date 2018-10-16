@@ -2,8 +2,34 @@
   position: absolute;
   height: 50px;
   width: 293px;
-  background-color: yellow;
+ /* background-color: yellow;*/
   border-radius: 6px;
   left: 662px;
-  box-shadow: 4px 4px 4px grey;
+/*  box-shadow: 4px 4px 4px grey;*/
+}
+
+.playbutton {
+  position: absolute;
+  height: 35px;
+  width: 180px;
+  border-radius: 10px;
+  /*border: 1px solid #4CB963;*/
+  left: 30px;
+  top: 7.5px;
+  background-color: #4CB963;
+  box-shadow: 2px 2px 2px grey;
+  font-size: 17px;
+}
+
+.pausebutton {
+  position: absolute;
+  height: 35px;
+  width: 70px;
+  border-radius: 10px;
+  /*border: 1px solid #E83151;*/
+  right: 0px;
+  top: 7.5px;
+  background-color: #E83151;
+  box-shadow: 2px 2px 2px grey;
+  font-size: 13px;
 }

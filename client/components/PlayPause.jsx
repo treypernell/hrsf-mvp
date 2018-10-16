@@ -5,8 +5,8 @@ import styles from '../styles/PlayPause.css'
 const PlayPause = (props) => {
   return (
     <div className={`${styles['playpause-container']}`}>
-      <button onClick={props.playSequence}>Play</button>
-      <button onClick={props.pauseSequence}>Pause</button>
+      <button className={`${styles['playbutton']}`} onClick={props.playSequence}>Play</button>
+      <button className={`${styles['pausebutton']}`} onClick={props.pauseSequence}>Pause</button>
     </div>
   )
 }
