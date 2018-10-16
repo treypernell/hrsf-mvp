@@ -1,0 +1,9 @@
+.playpause-container {
+  position: absolute;
+  height: 50px;
+  width: 293px;
+  background-color: yellow;
+  border-radius: 6px;
+  left: 662px;
+  box-shadow: 4px 4px 4px grey;
+}

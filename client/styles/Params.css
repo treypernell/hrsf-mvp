@@ -1,0 +1,32 @@
+.params-container {
+  position: absolute;
+  top: 59px;
+  width: 80%;
+/*  background-color: white;*/
+  left: 23px;
+  height: 100px;
+  font-style: italic;
+}
+
+.scalechoice-text {
+  margin-bottom: 5px;
+}
+
+.tempochoice-text {
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+
+.slow-text {
+  position: absolute;
+  font-size: 13px;
+  left: 0px;
+  top: 76px;
+}
+
+.fast-text {
+  position: absolute;
+  font-size: 13px;
+  right: 6px;
+  top: 76px;
+}

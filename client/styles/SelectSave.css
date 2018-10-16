@@ -1,0 +1,23 @@
+.selectsave-container {
+  position: absolute;
+  top: 250px;
+  width: 80%;
+  /*background-color: white*/;
+  height: 150px;
+  left: 23px;
+  font-style: italic;
+}
+
+.newtitle-text {
+  margin-bottom: 5px;
+}
+
+.selectsong-text {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.save-text {
+    width: 70%;
+    margin-right: 15px;
+}

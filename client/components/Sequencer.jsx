@@ -69,6 +69,12 @@ class Sequencer extends React.Component {
     }).call(this)
   }
 
+  updateTempo(e) {
+    this.setState({
+      tempo: e,
+    })
+  }
+
   pauseSequence() {
     this.setState({
       playToggle: !this.state.playToggle,
@@ -76,16 +82,19 @@ class Sequencer extends React.Component {
       colCurrentlyPlayed: -1,
     })
   }
+
   updateSongTitle(e) {
     this.setState({
       songTitle: e.target.value,
     })
   }
+
   updateScale(e) {
     this.setState({
       scale: e.target.value,
     })
   }
+
   loadExistingSong(e) {
     if (e.target.value === '') {
       return;
@@ -121,10 +130,6 @@ class Sequencer extends React.Component {
     }) 
   }
 
-  componentDidMount() {
-    this.fetchAllSongs();
-  }
-
   updateSequence(currentNote, col, prevNote = null, isKeyChange = false) {
     this.setState((prevState) => {
       if (isKeyChange) {
@@ -143,10 +148,8 @@ class Sequencer extends React.Component {
     })
   }
 
-  changeTempo(e) {
-    this.setState({
-      tempo: e,
-    })
+  componentDidMount() {
+    this.fetchAllSongs();
   }
 
   render() {
@@ -161,12 +164,11 @@ class Sequencer extends React.Component {
       notesCurrentlyPlayed, 
       colCurrentlyPlayed } = this.state
     return (
-      <div>
+      <div className={`${styles['app-container']}`}>
       <PlayPause 
         playSequence={this.playSequence.bind(this)}
         pauseSequence={this.pauseSequence.bind(this)}/>
-      <div className='sequence-container'>
-        <Scrubber />
+      <div className={`${styles['sequence-container']}`}>
         <div className={`${styles['sequence-grid']}`}>
           {
             rows.map((val, row) => {
@@ -187,42 +189,24 @@ class Sequencer extends React.Component {
           }
         </div>
       </div>
-      <Params 
-        updateScale={this.updateScale.bind(this)}
-        scale={scale}
-        scales={scales}
-        changeTempo={this.changeTempo.bind(this)}/>
-      <SelectSave 
-          selectedSequence={selectedSequence} 
-          sequences={sequences}
-          loadExistingSong={this.loadExistingSong.bind(this)}
-          updateSongTitle={this.updateSongTitle.bind(this)}
-          saveSong={this.saveSong.bind(this)}/>
+      <div className={`${styles['sidebar-container']}`}>
+      <div className={`${styles['options-text']}`}>Options</div>
+        <Params 
+          updateScale={this.updateScale.bind(this)}
+          scale={scale}
+          scales={scales}
+          updateTempo={this.updateTempo.bind(this)}/>
+      <div className={`${styles['savesong-text']}`}>Save/Select Song</div>
+        <SelectSave 
+            selectedSequence={selectedSequence} 
+            sequences={sequences}
+            loadExistingSong={this.loadExistingSong.bind(this)}
+            updateSongTitle={this.updateSongTitle.bind(this)}
+            saveSong={this.saveSong.bind(this)}/>
+      </div>
       </div>
       )
   }
 }
 
 export default Sequencer;
-
-
-
-/*
-  TODO: 
-    - Refactor code for clarity - extract
-      logic from sequence functions and put in
-      helper functions file. ** DO THIS LAST **
-    - Have buttons highlight when 'played' by the synth **TIME INTENSIVE**
-    - ONE WORD: Deploy
-*/
-
-
-/*
-  DONE
-    - Make the grid wider overall, allowing for more notes to be selected!
-    - Load a given configuration from a selected file **TIME INTENSIVE**
-    - Create button allowing for persistence of.  **DO THIS ONE FIRST**
-      current configuration. 
-
-
-*/

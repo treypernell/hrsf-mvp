@@ -45,9 +45,6 @@ class Square extends React.Component {
   toggleNotePlayedColor() {
     const { col, row, colCurrentlyPlayed, gridChords, note} = this.props;
     const { playNoteClass } = this.state;
-    if (col === 0 && row === 0) {
-      console.log(col, colCurrentlyPlayed);
-    }
     if (col === colCurrentlyPlayed && 
         playNoteClass === '' &&
         gridChords[col].indexOf(note) >= 0) {
@@ -66,7 +63,6 @@ class Square extends React.Component {
     const { selectedSequence, gridChords, row, col, note, updateSequence } = this.props;
     const { isSelected } = this.state;
     if (selectedSequence !== prevProps.selectedSequence) {
-      // console.log(gridChords)
       let inSequence = gridChords[col].indexOf(note) >= 0;
       if (inSequence && !isSelected) {
         this.stageNote(null, true);
