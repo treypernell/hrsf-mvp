@@ -9,15 +9,14 @@ class Square extends React.Component {
     this.state ={
       isSelected: false,
       buttonClass: `${styles['unselected']}`,
+      playNoteClass:  '',
     }
     this.stageNote = this.stageNote.bind(this);
   }
 
-
-  //refactor so that it doesn't have to look at events...
   stageNote(e, newSequenceStaging = false) {
     const { row, col, updateSequence, note } = this.props;
-    const newClass = this.state.isSelected ? `${styles['unselected']}` : `${styles['selected']}`
+    const newClass = this.state.isSelected ? `${styles['unselected']}` : `${styles['selected']}`    
     this.setState((prevState) => {
       return {
         isSelected: !prevState.isSelected,
@@ -25,7 +24,6 @@ class Square extends React.Component {
       }
     })
     if(!newSequenceStaging) {
-      console.log('made it here');
       updateSequence(note, col);
     }
   }
@@ -44,14 +42,34 @@ class Square extends React.Component {
     }
   }
 
+  toggleNotePlayedColor() {
+    const { col, row, colCurrentlyPlayed, gridChords, note} = this.props;
+    const { playNoteClass } = this.state;
+    if (col === 0 && row === 0) {
+      console.log(col, colCurrentlyPlayed);
+    }
+    if (col === colCurrentlyPlayed && 
+        playNoteClass === '' &&
+        gridChords[col].indexOf(note) >= 0) {
+      this.setState({
+        playNoteClass: `${styles['note-played']}`
+      })
+    setTimeout(() => {
+      this.setState({
+        playNoteClass: '',
+      })
+    }, 1000)
+    }
+  }
+
   updateWithNewSequence(prevProps) {
     const { selectedSequence, gridChords, row, col, note, updateSequence } = this.props;
     const { isSelected } = this.state;
     if (selectedSequence !== prevProps.selectedSequence) {
+      // console.log(gridChords)
       let inSequence = gridChords[col].indexOf(note) >= 0;
       if (inSequence && !isSelected) {
         this.stageNote(null, true);
-        console.log(col, note);
       } else if (!inSequence && isSelected) {
         this.stageNote(null, true)
       }
@@ -61,18 +79,19 @@ class Square extends React.Component {
   componentDidUpdate(prevProps) {
     this.updateScale(prevProps);
     this.updateWithNewSequence(prevProps);
+    this.toggleNotePlayedColor()
   }
 
 
   render() {
     return(
-      <div className={`${styles['square-container']}`}>
-        <button 
-          className={`${this.state.buttonClass} ${styles['square']}`}
-          onClick={this.stageNote}>
-          {!this.props.col ? this.props.note : ''}
-        </button>
-      </div>
+        <div className={`${styles['square-container']}`}>
+          <button 
+            className={`${this.state.buttonClass} ${this.state.playNoteClass} ${styles['square']}`}
+            onClick={this.stageNote}>
+            {!this.props.col ? this.props.note : ''}
+          </button>
+        </div>
     )
   }
 }

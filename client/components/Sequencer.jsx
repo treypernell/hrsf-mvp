@@ -10,35 +10,28 @@ import Square from './Square.jsx';
 import Scrubber from './Scrubber.jsx'
 import SelectSave from './SelectSave.jsx'
 import Scales from '../scales.js';
+import synth from '../synth.js';
 
-var tremolo = new Tone.Tremolo().start();
-var synth = new Tone.PolySynth({
-    "oscillator" : {
-        "type" : "pwm",
-        "modulationFrequency" : 0.8
-    },
-    "envelope" : {
-        "attack" : 0.02,
-        "decay" : 0.1,
-        "sustain" : 0.2,
-        "release" : 0.9,
-    }
-}).chain(tremolo, Tone.Master);
+const ROWS = [0,1,2,3,4,5,6];
+const COLS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+const GRID_CHORDS_INIT = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 
 class Sequencer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       playToggle: false,
-      gridChords: [[],[],[],[],[],[],[],[],[],[],[],[]], //a rotated version of the grid with notes for easy chord reading...
-      scales: Object.keys(Scales), //a scale for determining which notes can be chosen. 
+      gridChords: GRID_CHORDS_INIT, 
+      scales: Object.keys(Scales),
       scale: 'major',
-      rows: [1,2,3,4,5,6,7],
-      cols: [1,2,3,4,5,6,7,8,9,10,11,12],
+      rows: ROWS,
+      cols: COLS,
       tempo: 1,
       sequences: [],
       selectedSequence: null,
       songTitle: '',
+      notesCurrentlyPlayed: [],
+      colCurrentlyPlayed: -1,
     };
   }
 
@@ -66,7 +59,11 @@ class Sequencer extends React.Component {
     (function playNote() {
       if (this.state.playToggle === toggled) {
         synth.triggerAttackRelease(this.state.gridChords[colNum], 0.1);
-        colNum = (colNum + 1) % 12
+        this.setState({
+          notesCurrentlyPlayed: this.state.gridChords[colNum],
+          colCurrentlyPlayed: colNum,
+        })
+        colNum = (colNum + 1) % 16;
         setTimeout(playNote.bind(this), (1000/this.state.tempo));
       }
     }).call(this)
@@ -75,6 +72,8 @@ class Sequencer extends React.Component {
   pauseSequence() {
     this.setState({
       playToggle: !this.state.playToggle,
+      notesCurrentlyPlayed: [],
+      colCurrentlyPlayed: -1,
     })
   }
   updateSongTitle(e) {
@@ -91,16 +90,17 @@ class Sequencer extends React.Component {
     if (e.target.value === '') {
       return;
     }
-    
     axios.get( `/sequence/${e.target.value}`)
       .then((result) => {
         let { scale, tempo, gridChords } = result.data[0];
-        console.log('LOADING: ', result.data[0].name)
         this.setState({
           scale,
           tempo,
-          gridChords,
-          selectedSequence: result.data[0].name,
+        }, () => {
+          this.setState({
+            gridChords,     
+            selectedSequence: result.data[0].name,
+          })
         })
       })
       .catch((err) => {
@@ -127,7 +127,6 @@ class Sequencer extends React.Component {
 
   updateSequence(currentNote, col, prevNote = null, isKeyChange = false) {
     this.setState((prevState) => {
-      /* THIS LOGIC CAN BE EXTRACTED - PLACED IN A DIFFERENT FILE */
       if (isKeyChange) {
         let prevNoteIndex = prevState.gridChords[col].indexOf(prevNote);
         prevState.gridChords[col].splice(prevNoteIndex, 1)
@@ -151,8 +150,16 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    const { rows, cols, scale, scales, selectedSequence, sequences, gridChords } = this.state
-    this.state
+    const { 
+      rows, 
+      cols, 
+      scale, 
+      scales, 
+      selectedSequence, 
+      sequences, 
+      gridChords, 
+      notesCurrentlyPlayed, 
+      colCurrentlyPlayed } = this.state
     return (
       <div>
       <PlayPause 
@@ -166,6 +173,8 @@ class Sequencer extends React.Component {
               return cols.map((val, col) => {
                 return (
                   <Square 
+                    notesCurrentlyPlayed={notesCurrentlyPlayed}
+                    colCurrentlyPlayed={colCurrentlyPlayed}
                     selectedSequence={selectedSequence}
                     gridChords={gridChords}
                     row={row} 
@@ -203,15 +212,15 @@ export default Sequencer;
     - Refactor code for clarity - extract
       logic from sequence functions and put in
       helper functions file. ** DO THIS LAST **
-    - Load a given configuration from a selected file **TIME INTENSIVE**
     - Have buttons highlight when 'played' by the synth **TIME INTENSIVE**
-    - Make the grid wider overall, allowing for more notes to be selected!
     - ONE WORD: Deploy
 */
 
 
 /*
   DONE
+    - Make the grid wider overall, allowing for more notes to be selected!
+    - Load a given configuration from a selected file **TIME INTENSIVE**
     - Create button allowing for persistence of.  **DO THIS ONE FIRST**
       current configuration. 
 

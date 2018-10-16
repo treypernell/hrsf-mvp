@@ -23,7 +23,7 @@ module.exports = {
     Sequence.find({ name: sequenceName})
       .exec((err, result) => {
         if (err) console.log(err)
-        console.log('DB RESULT', result);
+        console.log('DB RESULT', result[0].gridChords);
       return callback(result);
       })
   }

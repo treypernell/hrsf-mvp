@@ -14,6 +14,7 @@ const scales = {
   lydian: ["B4", "A4", "G4", "F#4", "E4", "D4", "C4"],
   phyrgian: ["Bb4", "Ab4", "G4", "F4", "Eb4", "Db4", "C4"],
   locrian: ["Bb4", "Ab4", "Gb4", "F4", "Eb4", "Db4", "C4"],
+  chromatic: ["Gb4", "F4", "E4", "Eb4", "D4", "Db4", "C4"]
 }
 
 export default scales;
